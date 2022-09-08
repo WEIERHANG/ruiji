@@ -1,0 +1,107 @@
+1、代码生成器生成项目文档，配置yml和依赖。
+
+登录：
+2、继承WebMvcConfigurationSupport类重写addResourceHandlers方法，进行静态资源映射,
+(因为将backend和front文件放到resources里面直接访问不到)
+3、reggie_take_outBody注解用来响应前端json格式，将密码进行md5加密，用LambdaQueryWrapper方法比对输入的用户名和数据库用户名是否一致，调用
+getOne()方法，用户名没有说明没有注册，然后将数据库查到的密码emp.getPassword()和输入密码进行对比进行判断，在查看一下数据库用户状态
+emp.getStatus()==0 等于0是禁用
+
+退出：
+1、将session中的信息清除掉request.getSession().removeAttribute("employee")方法
+
+登录过滤器拦截：
+1、避免用户在浏览器直接输入路径登录
+2、实现Filter接口，重写doFilter方法，先设置放行路径，用路径匹配器AntPathMatcher检查请求路径和访问路径是否一致，如果一致则不需要处理filterChain.doFilter(request,response)，直接放行。
+3、如果用户登录了，直接放行。
+4、用户未登录，通过输出流方式向客户端界面响应数据
+
+添加员工：
+1、对密码进行md5加密
+2、从session里面获取creatUser----request.getSession().getAttribute("employee")
+3、数据表用户名有唯一约束，重复添加会出现冲突----自定义全局捕获异常
+4、@ControllerAdvice(annotations = {RestController.class, Controller.class})需要捕获哪些异常类
+5、@ExceptionHandler(SQLIntegrityConstraintViolationException.class)捕获哪种异常
+
+员工信息分页查询
+1、首先配置分页组件PaginationInnerInterceptor，用LambdaQueryWrapper来构造查询条件，employeeService.page执行查询
+处理雪花id，前端传入后端失去精度问题-----long类型长度最大为16，超过以后会舍去
+1、定义映射处理器--jackson将Java对象转为json，或者将json转为Java对象映射处理器
+2、拓展mvc转换器---重写extendMessageConverters方法
+3、用MappingJackson2HttpMessageConverter对象创建mvc的消息转换器，因为底层转化实在mvc下实现的
+4、设置对象转换器，将自己定义的JacksonObjectMapper放入到MappingJackson2HttpMessageConverter中
+5、converters.add(0,messageConverter)----将自己的映射处理器置前
+
+公共字段自动填充
+1、自动填充好处就是统一对每个类公共的字段进行处理，比如：创建人，创建时间等
+2、实体类属性上加入@TableField，指定自动填充策略
+3、实现MetaObjectHandler（元数据处理器）---重写insertFill和updateFill
+
+获取当前用户id
+1、基于ThreadLocal封装工具类，用户保存和获取当前登录用户id
+
+文件上传
+1、 public R<String> upload(MultipartFile file){},定义一个方法,传入MultipartFile类，file属性需要和前端名称一致
+2、file.getOriginalFilename()获得文件原名称
+3、.substring(orginalFileName.lastIndexOf("."))截取文件后缀格式，wewe.jpg------.jpg
+4.用uuid给文件重新命名，防止名字重复替换掉，UUID.randomUUID.toString()+suffix
+5.创建一个存储文件的目录 File dir=new(basePath); --basePath需要在yml文件里定义一个  path: D:\
+6、判断当前目录是否存在  !dir.exists(){dir.mkdirs()}---如果路径不存在就新建一个
+7、transferTo(New File(basePath+fileName))----转存文件，如果不转存的话，生成的临时文件会在请求后消失
+
+新增菜品
+1、分两步添加菜品，第一是直接往dish里面保存数据，第二用dishId查出dishFlavor关联的信息用集合封装起来，插入数据库
+2、引入Dto对象，dto获取到的Flavors信息用List<DishFlavor>保存起来，
+3、直接获取的数据没有dishId,通过流的形式遍历集合，flavors.stream().map((item)->{
+        item.setDishId(dishId);
+        return item;
+})
+4、保存集合用saveBatch();
+
+分页查询、
+1、除了基本的Page<>分页构造器以外还使用了对象拷贝---BeanUtils.copyProperties(源信息，目标信息，要忽略的信息);
+2、构造过滤条件LambdaQueryWrapper<Setmeal> queryWrapper=new LambdaQueryWrapper<>();
+3、Dto对象拷贝基本分页构造器的信息，忽略records----是因为两个泛型不一样
+4、将records集合信息获取出来，用流的形式拷贝到dto对象中
+5、根据id查询出name，给dto中的name赋值
+6、将records数据set到dtoPage中
+
+编辑信息
+1、条件构造+对象拷贝
+2、首先将元对象的数据查出来通过id
+3、查出来的这个数据拷贝到dto对象
+4、条件构造
+5、service.list(queryWrapper)
+6、dto.set()数据
+
+修改信息
+1、两张表的信息（先直接修改基础表，关联表的信息先通过id查出来，删除之后在插入）
+2、构造+流
+3、dto。getId()将信息赋值给源对象，
+4、通过id比对，构造条件，删除关联表信息
+5、获取dto.getSetmealDishes();信息赋值给List<SetmealDish>
+6、套餐--菜品对应表中没有赋值setmealId信息，所以通过流的形式将dto.id信息赋值给item.setSetmealId();
+7、保存集合--saveBatch();
+
+删除套餐--菜品对应信息
+1、条件构造    或者  遍历集合
+2、先判断status在起售状态下不能删除，queryWrapper.eq(Setmeal::getStatus,1);
+                              queryWrapper.in(Setmeal::getId,ids);
+                              int count=this.count(queryWrapper);
+3、 lambdaQueryWrapper.in(SetmealDish::getSetmealId,ids);条件构造删除菜品对应信息
+4、或者  遍历数据-- for(String str:ids){
+    //            LambdaQueryWrapper<SetmealDish> queryWrapper1=new LambdaQueryWrapper<>();
+    //            queryWrapper1.eq(SetmealDish::getSetmealId,str);
+    //            setmealDishService.remove(queryWrapper1);
+    //        }
+
+
+短信发送---阿里云短信服务
+1、应用场景（验证码，短信通知（快递到站通知），推广短信）
+2、首先开通阿里云短信服务，签名--模板--手机号--参数
+3、引入maven坐标，将阿里云生成的SDK示例导入
+4、手机端用户登录首先发送验证码，获取手机号，判断手机号不为空之后，后台随机生成4位验证码（自己封装ValidateCodeUtils工具类），将验证码保存到session中
+5、点击登录按钮，Map集合获取数据，将页面的验证码和session中的验证码比对，比对成功之后，判断当前手机号是否已注册，新用户直接保存至数据库
+
+手机端地址簿
+1、
