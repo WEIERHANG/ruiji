@@ -1,5 +1,7 @@
 手机端:
 localhost:8080/front/page/login.html
+pc端：
+http://localhost:8080/backend/index.html
 
 1、代码生成器生成项目文档，配置yml和依赖。
 
