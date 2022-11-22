@@ -9,6 +9,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 public class RedisConfig {
+    //extends CachingConfigurerSupport
     /*
     * redisTemplate默认是默认序列化器是JdkSerializationRedisSerializer，需要序列化
     *

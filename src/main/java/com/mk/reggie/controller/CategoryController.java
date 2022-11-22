@@ -66,7 +66,7 @@ public class CategoryController {
      * @param category
      * @return
      */
-    @GetMapping("list")
+    @GetMapping("/list")
     public R<List<Category>> list(Category category){
         //条件构造器
         LambdaQueryWrapper<Category> queryWrapper=new LambdaQueryWrapper();
