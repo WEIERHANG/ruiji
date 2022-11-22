@@ -1,4 +1,4 @@
-package com.mk.test;
+package com.mk.reggie;
 
 import org.junit.jupiter.api.Test;
 
