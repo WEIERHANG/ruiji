@@ -1,6 +1,8 @@
 package com.mk.reggie;
 
+import com.fasterxml.jackson.datatype.jsr310.ser.ZonedDateTimeSerializer;
 import org.junit.Test;
+import org.junit.platform.commons.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +35,25 @@ public class TimeTest {
         //输出2022/01/02
     }
 
+    /**
+     *  ZonedDateTime转String
+     */
+    @Test
+    public void testTime5(){
+        String startTime="1543593600000";
+        String endTime="1672588799000";
+        ZonedDateTime start = ZonedDateTime.ofInstant(new Date(Long.valueOf(startTime)).toInstant(), ZoneId.systemDefault());
+        ZonedDateTime end = ZonedDateTime.ofInstant(new Date(Long.valueOf(endTime)).toInstant(), ZoneId.systemDefault());
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd 00:00:00").withZone(ZoneId.of("Asia/Shanghai"));
+        if(startTime != null){
+            String format = start.format(dtf);
+            System.out.println(format);
+        }
+    }
+
+    /**
+     * String转ZonedDateTime转LocalDate
+     */
     @Test
     public void timeTest3() {
         //LocalDateTime练习
@@ -54,4 +75,20 @@ public class TimeTest {
             System.out.println(start);
         }
     }
+
+    /**
+     * 将时间戳转换为时间
+     * 1543593600000
+     * 1672588799000
+     */
+    @Test
+    public void testTime4(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
+        String sd = sdf.format(new Date(Long.parseLong(String.valueOf("1543593600000"))));
+        System.out.println(sd);
+
+    }
+
+
 }
