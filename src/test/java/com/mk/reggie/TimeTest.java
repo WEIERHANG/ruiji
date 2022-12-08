@@ -25,11 +25,9 @@ public class TimeTest {
     public void timeTest1() throws ParseException {
         String birth = "20220102";
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
         SimpleDateFormat formatter2 = new SimpleDateFormat("yyyyMMdd");
 
         Date date = formatter2.parse(birth);
-
         String birthday = formatter.format(date);
         System.out.println(birthday);
         //输出2022/01/02
@@ -55,7 +53,5 @@ public class TimeTest {
             ZonedDateTime start = startParse.atZone(zoneId);
             System.out.println(start);
         }
-
-
     }
 }
