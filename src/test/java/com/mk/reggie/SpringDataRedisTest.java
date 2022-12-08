@@ -8,6 +8,9 @@ import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.core.*;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -137,5 +140,4 @@ public class SpringDataRedisTest {
         DataType dataType = redisTemplate.type("itcast");
         System.out.println(dataType);
     }
-
 }
