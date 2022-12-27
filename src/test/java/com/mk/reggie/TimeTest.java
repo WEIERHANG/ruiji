@@ -87,8 +87,5 @@ public class TimeTest {
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
         String sd = sdf.format(new Date(Long.parseLong(String.valueOf("1543593600000"))));
         System.out.println(sd);
-
     }
-
-
 }
