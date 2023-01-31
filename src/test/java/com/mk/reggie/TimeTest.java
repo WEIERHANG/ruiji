@@ -88,4 +88,13 @@ public class TimeTest {
         String sd = sdf.format(new Date(Long.parseLong(String.valueOf("1543593600000"))));
         System.out.println(sd);
     }
+
+    @Test
+    public void getMonthDay(){
+        int year=2023;
+        int month=2;
+        int days=new Date(year,month,0).getDate();
+        System.out.println(days);
+    }
+
 }
