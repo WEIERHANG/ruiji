@@ -3,6 +3,11 @@ package com.mk.reggie;
 
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class DemoTest {
     @Test
     public void test(){
@@ -14,12 +19,11 @@ public class DemoTest {
 //        System.out.println(matches1);
 //        System.out.println(matches2);
 
-        String test1="1mm";
-        if(test1.indexOf("m")!=-1){
-            String m = test1.replace("m", "");
-            System.out.println(m);
-        }
+//        String test1="1mm";
+//        if(test1.indexOf("m")!=-1){
+//            String m = test1.replace("m", "");
+//            System.out.println(m);
+//        }
 //        System.out.println(mm);
-    }
-
+        }
 }
