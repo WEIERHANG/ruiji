@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0,user-scalable=no,minimal-ui">
-    <title>菩提阁</title>
+    <title>배고파요？</title>
     <link rel="icon" href="images/favico.ico">
     <!--不同屏幕尺寸根字体设置-->
     <script src="./js/base.js"></script>
@@ -25,18 +25,18 @@
       </div>
       <div class="divTitle">
         <div class="divStatic">
-          <img src="./images/logo.png"  class="logo"/>
+          <img src="images/logo1.png" class="logo"/>
           <div class="divDesc">
-            <div class="divName">菩提阁餐厅</div>
+            <div class="divName">배고파요？</div>
             <div class="divSend">
-                <span><img src="./images/time.png"/> 距离1.5km</span>
-                <span><img src="./images/money.png"/> 配送费6元</span>
-                <span><img src="./images/location.png"/> 预计时长12min</span>
+                <span><img src="./images/time.png"/>거리 1.5km</span>
+                <span><img src="./images/money.png"/> 배송비 3000원</span>
+                <span><img src="./images/location.png"/> 예상시간 30분</span>
             </div>
           </div>
         </div>
         <div class="divDesc">
-          简介: 菩提阁中餐厅是菩提阁点餐的独立的品牌，定位“大众 化的美食外送餐饮”，旨为顾客打造专业美食。
+          소개: 보리각 중식당은 보리각에서 주문한 독립적인 브랜드로 '대중적인 음식 배달 음식'으로 자리매김하여 고객에게 전문적인 음식을 만드는 것을 목표로 합니다.
         </div>
       </div>
       <div class="divBody">
@@ -86,7 +86,7 @@
               <span>{{goodsPrice}}</span>
           </div>
           <div class="divPrice"></div>
-          <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="toAddOrderPage">去结算</div>
+          <div :class="{btnSubmitActive: cartData && cartData.length > 0, btnSubmit:!cartData || cartData.length<1}" @click="toAddOrderPage">결제하다</div>
         </div>
         <van-dialog v-model="dialogFlavor.show" :show-confirm-button="false" class="dialogFlavor" ref="flavorDialog">
           <div class="dialogTitle">{{dialogFlavor.name}}</div>
@@ -102,7 +102,7 @@
           </div>
           <div class="divBottom">
             <div><span class="spanMoney">￥</span>{{dialogFlavor.price/100}}</div>
-            <div @click="dialogFlavorAddCart">加入购物车</div>
+            <div @click="dialogFlavorAddCart">장바구니 담기</div>
           </div>
           <div class="divFlavorClose" @click="dialogFlavor.show = false">
             <img src="./images/close.png"/>
@@ -110,9 +110,9 @@
         </van-dialog>
         <van-popup v-model="cartDialogShow" position="bottom" :style="{ height: '50%' }" class="dialogCart">
           <div class="divCartTitle">
-            <div class="title">购物车</div>
+            <div class="title">장바구니</div>
             <div class="clear" @click="clearCart">
-              <i class="el-icon-delete"></i> 清空
+              <i class="el-icon-delete"></i> 비우다
             </div>
           </div>
           <div class="divCartContent">

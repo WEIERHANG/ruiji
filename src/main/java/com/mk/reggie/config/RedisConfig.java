@@ -14,7 +14,6 @@ public class RedisConfig {
     //extends CachingConfigurerSupport
     /*
     * redisTemplate默认是默认序列化器是JdkSerializationRedisSerializer，需要序列化
-    *
     * */
     @Bean
     public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory connectionFactory){
