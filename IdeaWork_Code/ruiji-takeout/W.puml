@@ -1,0 +1,60 @@
+@startuml
+
+package "Controller" {
+    class UserController {
+        +sendMsg(phone: String, session: HttpSession): R<String>
+        +login(phone: String, code: String, codeInSession: HttpSession): R<Object>
+    }
+
+    class ShoppingCartController {
+        +add(shoppingCart: ShoppingCart): R<ShoppingCart>
+        +list(): R<List<ShoppingCart>>
+        +clean(): R<String>
+        +sub(shoppingCart: ShoppingCart): R<ShoppingCart>
+    }
+
+    class SetmealController {
+        +page(page: int, pageSize: int, name: String): R<Page>
+        +addSetmeal(setmealDto: SetmealDto): R<String>
+        +editSetmeal(id: Long): R<SetmealDto>
+        +updateSetmealDish(setmealDto: SetmealDto): R<String>
+        +deleteSetmealDish(ids: List<Long>): R<String>
+        +updateStatus(number: int, ids: Long[]): R<String>
+        +list(setmeal: Setmeal): R<List<Setmeal>>
+    }
+}
+
+package "Services" {
+    interface IUserService {
+        +getOne(query: LambdaQueryWrapper): User
+        +save(user: User): void
+    }
+    interface IShoppingCartService {
+        +getOne(query: LambdaQueryWrapper): ShoppingCart
+        +save(shoppingCart: ShoppingCart): void
+        +list(query: LambdaQueryWrapper): List<ShoppingCart>
+        +updateById(shoppingCart: ShoppingCart): void
+        +remove(query: LambdaQueryWrapper): void
+    }
+    interface ISetmealService {
+        +page(page: Page, query: LambdaQueryWrapper): void
+        +saveMealAndDish(setmealDto: SetmealDto): void
+        +editSetmealDish(id: Long): SetmealDto
+        +updateSetealDish(setmealDto: SetmealDto): void
+        +deleteSetealDish(ids: List<Long>): void
+        +getById(id: Long): Setmeal
+        +updateById(setmeal: Setmeal): void
+        +list(query: LambdaQueryWrapper): List<Setmeal>
+    }
+}
+
+UserController ..> IUserService
+UserController ..> RedisTemplate
+
+ShoppingCartController ..> IShoppingCartService
+
+SetmealController ..> ISetmealService
+SetmealController ..> ICategoryService
+SetmealController ..> ISetmealDishService
+
+@enduml
